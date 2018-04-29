@@ -48,7 +48,9 @@ ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-
+uint16_t PomiarADC;
+float Temperature;
+float Vsense;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -94,14 +96,29 @@ int main(void)
   /* Initialize all configured peripherals */
   MX_ADC1_Init();
   /* USER CODE BEGIN 2 */
-
+   	  HAL_ADC_Start(&hadc1); //rozpoczecie pierwszej konwersji
+  	  const float V25 = 0.76; //[Volts]
+  	  const float Avg_slope = 0.0025;  //[Volts/degree]
+  	  const float SupplyVoltage = 3.0; //[Volts]-maksymalne napiecie zasilania
+  	  const float ADCResolution = 4095.0;//czemu takie - dowiedz sie
+  	  //juz wiem - ustawiony jest 12 bitowy przetwornikow a 2^12 to 4096
   /* USER CODE END 2 */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
+	  if(HAL_ADC_PollForConversion(&hadc1,10) == HAL_OK)
+	  //Oczekiwanie na zakonczenie konwersji
+	  {
+		  PomiarADC = HAL_ADC_GetValue(&hadc1); //Pobranie zmierzonej wartosci
+		  Vsense = (SupplyVoltage*PomiarADC)/ADCResolution;
+		  //przeliczenie wartosci zmierzonej na napiecie
+		  Temperature = ((Vsense-V25)/Avg_slope)+25;//Obliczenie temperatury
 
+
+		  HAL_ADC_Start(&hadc1); //rozpoczecie nowej konwersji
+	  }
   /* USER CODE END WHILE */
 
   /* USER CODE BEGIN 3 */
