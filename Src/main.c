@@ -44,18 +44,21 @@
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
+ADC_HandleTypeDef hadc1;
 
 /* USER CODE BEGIN PV */
 /* Private variables ---------------------------------------------------------*/
-ADC_HandleTypeDef hadc1;
-const float V25 = 0.76; //[Volts]
-const float Avg_slope = 0.0025;  //[Volts/degree]
-const float SupplyVoltage = 3.0; //[Volts]-maksymalne napiecie zasilania
-const float ADCResolution = 4095.0; //czemu takie - dowiedz sie
-//juz wiem - ustawiony jest 12 bitowy przetwornikow a 2^12 to 4096
 uint16_t PomiarADC;
 float Temperature;
 float Vsense;
+
+
+const float V25 = 0.76; //[Volts]
+const float Avg_slope = 0.0025;  //[Volts/degree]
+const float SupplyVoltage = 3.0; //[Volts]-maksymalne napiecie zasilania
+const float ADCResolution = 4096.0; //czemu takie - dowiedz sie
+//juz wiem - ustawiony jest 12 bitowy przetwornikow a 2^12 to 4096
+
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
@@ -67,7 +70,7 @@ static void MX_ADC1_Init(void);
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
 
 	PomiarADC = HAL_ADC_GetValue(&hadc1); //Pobranie zmierzonej wartosci
-	Vsense = (SupplyVoltage * PomiarADC) / ADCResolution;
+	Vsense = (SupplyVoltage * PomiarADC) / (ADCResolution-1);
 	//przeliczenie wartosci zmierzonej na napiecie
 	Temperature = ((Vsense - V25) / Avg_slope) + 25; //Obliczenie temperatury
 
