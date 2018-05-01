@@ -68,7 +68,6 @@ static void MX_ADC1_Init(void);
 /* USER CODE BEGIN PFP */
 /* Private function prototypes -----------------------------------------------*/
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
-
 	PomiarADC = HAL_ADC_GetValue(&hadc1); //Pobranie zmierzonej wartosci
 	Vsense = (SupplyVoltage * PomiarADC) / (ADCResolution-1);
 	//przeliczenie wartosci zmierzonej na napiecie
@@ -110,7 +109,7 @@ int main(void) {
 	/* Initialize all configured peripherals */
 	MX_ADC1_Init();
 	/* USER CODE BEGIN 2 */
-	HAL_ADC_Start(&hadc1); //rozpoczecie pierwszej konwersji
+	HAL_ADC_Start_IT(&hadc1); //rozpoczecie pierwszej konwersji
 
 	/* USER CODE END 2 */
 
