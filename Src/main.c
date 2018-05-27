@@ -116,7 +116,6 @@ int main(void)
 		  //przeliczenie wartosci zmierzonej na napiecie
 		  Temperature = ((Vsense-V25)/Avg_slope)+25;//Obliczenie temperatury
 
-
 		  HAL_ADC_Start(&hadc1); //rozpoczecie nowej konwersji
 	  }
   /* USER CODE END WHILE */
